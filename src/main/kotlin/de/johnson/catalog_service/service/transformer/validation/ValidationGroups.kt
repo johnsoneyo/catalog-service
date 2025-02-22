@@ -1,0 +1,5 @@
+package de.johnson.catalog_service.service.transformer.validation
+
+
+interface DPBValidationGroup
+interface DQRValidationGroup
