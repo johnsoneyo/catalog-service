@@ -8,13 +8,14 @@ import de.johnson.catalog_service.service.transformer.validation.DPBValidationGr
 import de.johnson.catalog_service.service.transformer.validation.DQRValidationGroup
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation
+import jakarta.validation.Validator
 import org.springframework.util.CollectionUtils
 import kotlin.collections.set
 
 const val CATALOG_PRODUCTS = "/catalog-products"
 val MAPPER: ObjectMapper = ObjectMapper()
 
-val validator = Validation.buildDefaultValidatorFactory().validator
+val validatorFactory: Validator = Validation.buildDefaultValidatorFactory().validator
 
 /**
  * This collection maintains a product type to validation group
@@ -36,7 +37,7 @@ fun applyValidationGroupCheck(products: List<ProductBo>) {
 
         if (validationClass != null) {
             val violations: Set<ConstraintViolation<ProductBo>> =
-                validator.validate(product, validationClass)
+                validatorFactory.validate(product, validationClass)
 
             if (!CollectionUtils.isEmpty(violations)) {
                 errors["record " + (index + 1)] = violations.map { cv: ConstraintViolation<ProductBo> ->
@@ -49,7 +50,6 @@ fun applyValidationGroupCheck(products: List<ProductBo>) {
     }
 
     if (!CollectionUtils.isEmpty(errors)) {
-
         throw DataBeanValidationException(
             "error occurred at bean validation", DataBeanValidationException.ValidationError(
                 Type.VALIDATION,

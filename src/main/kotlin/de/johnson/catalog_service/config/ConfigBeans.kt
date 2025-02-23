@@ -7,7 +7,6 @@ import de.johnson.catalog_service.service.writer.FormatWriter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.*
-import kotlin.collections.HashMap
 
 
 @Configuration
