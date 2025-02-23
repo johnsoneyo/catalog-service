@@ -11,6 +11,7 @@ import de.johnson.catalog_service.exception.ErrorDto
 import de.johnson.catalog_service.exception.Type
 import de.johnson.catalog_service.utils.MAPPER
 import de.johnson.catalog_service.utils.applyValidationGroupCheck
+import de.johnson.catalog_service.utils.mapProduct
 import io.micrometer.common.util.StringUtils
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
@@ -40,7 +41,7 @@ class JSONEntityTransformer : Transformers {
             val mappedProducts: List<ProductBo> = MAPPER.readValue(
                 dataAggregator.file,
                 object : TypeReference<java.util.ArrayList<LinkedHashMap<String, Any>>>() {})
-                .map(::mapToProduct)
+                .map(LinkedHashMap<String, Any>::mapProduct)
 
             applyValidationGroupCheck(mappedProducts)
             return mappedProducts
@@ -52,18 +53,7 @@ class JSONEntityTransformer : Transformers {
         }
     }
 
-    /**
-     *
-     */
-    private fun mapToProduct(data: LinkedHashMap<String, Any>) = ProductBo(
-        data["productType"].toString(),
-        data["name"].toString(),
-        data["shortDescription"].toString(),
-        data["longDescription"].toString(),
-        data["classCode"].toString(),
-        data["supplierId"].toString(),
-        if (data["customsNumber"] != null) data["customsNumber"].toString().toLong() else null
-    )
+
 
     override fun transformerDataClass(): Class<out ProductData> = JSONProductData::class.java
 }

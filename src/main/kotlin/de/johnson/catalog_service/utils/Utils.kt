@@ -58,3 +58,13 @@ fun applyValidationGroupCheck(products: List<ProductBo>) {
         )
     }
 }
+
+
+fun LinkedHashMap<String, Any> .mapProduct() : ProductBo = ProductBo(
+    this["productType"].toString(),
+    this["name"].toString(),
+    this["shortDescription"].toString(),
+    this["longDescription"].toString(),
+    this["classCode"].toString(),
+    this["supplierId"].toString(),
+    if (this["customsNumber"] != null) this["customsNumber"].toString().toLong() else null )
